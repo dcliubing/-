@@ -1,0 +1,25 @@
+Sub 分页()
+Dim ioh, iol As Integer
+Application.ScreenUpdating = False
+If Not ActiveSheet.Cells(1, 7).Value Like "*仪表规格书*" Then
+MsgBox "检查是否仪表数据表表格"
+Exit Sub
+End If
+ioh = ActiveSheet.UsedRange.Rows.Count
+iol = ActiveSheet.UsedRange.Columns.Count
+
+
+  ActiveWindow.View = xlPageBreakPreview
+   ActiveSheet.ResetAllPageBreaks '重置所有水平分页符
+ActiveSheet.Names.Add "Print_Area", ActiveSheet.Range("A1").Resize(ioh, iol)  '动态打印区域
+
+i = ioh / 58
+While i > 1
+            Rows((i - 1) * 58 + 1).Select
+            ActiveWindow.SelectedSheets.HPageBreaks.Add Before:=ActiveCell
+
+          i = i - 1
+Wend
+Application.ScreenUpdating = True
+ 
+End Sub
