@@ -1,0 +1,87 @@
+Sub 工作簿生成()
+        Application.ScreenUpdating = False
+        
+'On Error Resume Next
+        newname = ActiveWorkbook.Name
+        newname2 = InputBox("请输入汇总表工作簿的名称：")
+         
+        Dim iFile As String
+        iFile = ThisWorkbook.Path & "\" & newname2 & ".xls"
+        Workbooks.Add
+        ActiveWorkbook.SaveAs iFile, True
+        
+        Workbooks(newname).Activate
+        
+        
+        
+        Dim btin$, btout$, jin%, chu%
+        
+        btin$ = ActiveSheet.Cells(1, 7)
+        
+        jin = InStr(btin, "(") + 1
+        chu = InStr(btin, ")")
+        btout = Mid(btin, jin, chu - jin)
+        Workbooks(newname2 & ".xls").Sheets.Add.Name = btout
+        Workbooks(newname2 & ".xls").Sheets(btout).Activate
+        Call 首行表格
+        Workbooks(newname).Activate
+Dim rng As Range, a As Range
+Dim fh, fl, lh, ll As Integer
+fh = 1
+fl = 1
+lh = 58
+ll = 33
+
+whh = 2
+jch = 2
+lch = 2
+gzh = 2
+
+whl = 1
+jcl = 2
+lcl = 3
+gzl = 4
+
+
+For n = 1 To 100 Step 1
+
+Set rng = Range(Cells(fh, fl), Cells(lh, ll))
+For Each a In rng
+
+
+    If Not a.Comment Is Nothing Then
+    
+                If a.Comment.Text Like "*位号<仪表索引表*" Then
+                
+                Workbooks(newname2 & ".xls").Sheets(btout).Cells(whh, whl).Value = a.Value
+                
+    
+                ElseIf a.Comment.Text Like "*检测位置*" Then
+                
+                Workbooks(newname2 & ".xls").Sheets(btout).Cells(jch, jcl).Value = a.Value
+                
+                ElseIf a.Comment.Text Like "*满刻度流量*" Or a.Comment.Text Like "*流量测量范围*" Then
+                
+                Workbooks(newname2 & ".xls").Sheets(btout).Cells(lch, lcl).Value = a.Value
+                
+                ElseIf a.Comment.Text Like "*故障状态*" Then
+                
+                Workbooks(newname2 & ".xls").Sheets(btout).Cells(gzh, gzl).Value = a.Value
+                
+                End If
+    End If
+    
+    
+Next a
+
+fh = fh + 58
+lh = lh + 58
+whh = whh + 1
+jch = jch + 1
+lch = lch + 1
+gzh = gzh + 1
+
+Next n
+        
+  Application.ScreenUpdating = True
+End Sub
