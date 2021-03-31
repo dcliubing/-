@@ -1,0 +1,58 @@
+Sub 开关阀位反馈加行()
+Application.ScreenUpdating = False
+Dim hang, senu, hangs, ii, sh, e, f As Integer
+
+
+Dim sjy, a, b, c, d As String
+
+i = 2
+e = 0
+hang = Selection.Row
+
+
+senu = Selection.Rows.Count
+
+
+hangs = hang + senu - 1
+
+
+
+
+
+
+For sh = hangs To hang Step -1
+
+sjy = ActiveSheet.Cells(sh, 1)
+
+
+If InStr(sjy, "XV-") > 0 Then
+                            a = Split(sjy, "XV-")
+                            b = Join(a, "ZSO-")
+                            c = Join(a, "ZSC-")
+
+    
+Rows(sh + 1).Select
+     For f = 1 To i
+e = e + 1
+    Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+    Next f
+                      
+       ActiveSheet.Cells(sh + 1, 1) = b
+       ActiveSheet.Cells(sh + 1, 2) = "阀位开反馈"
+     '  activesheet.Cells(sh + 1, 2) = "阀位开反馈"
+     ActiveSheet.Cells(sh + 2, 1) = c
+     ActiveSheet.Cells(sh + 2, 2) = "阀位关反馈"
+       
+    '   activesheet.Cells(sh + 2, 8) = "阀位关反馈"
+                 End If
+                      
+                      
+                      Next sh
+                      
+                     
+                      ActiveSheet.Range(Cells(hang, 1), Cells(hangs + e, 1)).Select
+                      
+
+
+Application.ScreenUpdating = True
+End Sub
