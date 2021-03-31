@@ -1,0 +1,169 @@
+
+Sub 多行列墙贴()
+Application.ScreenUpdating = False
+
+'Set arr66 = Nothing
+Dim hang, hangs, colns, colnss, toj, huan, ii, iit, sh, shi, lie, sht, e, f As Integer
+
+Dim arr2 As Variant
+
+Dim sjy, a, b, c, d As String
+
+On Error Resume Next
+hang = Selection.Row
+
+ii = Selection.Column
+iit = Selection.Column
+
+
+colns = ActiveCell.MergeArea.Columns.Count
+
+colnss = Selection.Columns.Count
+sht = 0
+toj = 0
+
+shi = 1
+
+
+
+
+
+
+a = 1
+
+
+
+'MsgBox senu
+'If LBound(arr66) > UBound(arr66) Then   '判断数组是否为空
+If (CStr(Join(arr66, ""))) = "" Then
+
+If Application.CountA(Selection) = 0 Then
+
+
+MsgBox "未选择任何内容"
+Exit Sub
+
+End If
+
+
+toi = 0
+Do
+
+huan = ActiveSheet.Cells(hang, iit).MergeArea.Columns.Count
+
+iit = iit + huan
+
+arr100(toi) = toj + 1
+toj = toj + huan
+toi = toi + 1
+
+
+ Loop Until toj = colnss
+arr55 = Selection
+
+senu = Selection.Rows.Count
+
+
+sh = 0
+
+hangs = hang + senu - 1
+
+
+
+ReDim arr66(0 To hangs)
+
+
+For hang = hang To hangs
+                            
+                            
+                            arr66(sh) = ActiveSheet.Cells(hang, ii)
+                            sh = sh + 1
+                            
+                           
+
+Next hang
+
+
+ReDim Preserve arr66(0 To sh)
+
+
+a = 1
+'arr66 = Selection.Value
+Else
+
+c = MsgBox("是否确定粘贴", vbOKCancel)
+
+
+
+If c = 2 Then
+Set arr66 = Nothing
+
+Exit Sub
+
+End If
+
+hang = Selection.Row
+
+iit = Selection.Column
+
+
+
+
+
+For toi = toi To 1 Step -1
+
+huan = ActiveSheet.Cells(hang, iit).MergeArea.Columns.Count
+
+
+arr3 = WorksheetFunction.Index(arr55, 0, arr100(sht))
+
+
+
+hangchu = hang
+
+bay = senu
+
+
+If senu = 1 Then
+
+ActiveSheet.Cells(hang, iit).Value = arr3(1)
+
+Else
+
+For senu = senu To 1 Step -1
+ActiveSheet.Cells(hang, iit).Value = arr3(shi, 1)
+shi = shi + 1
+hang = hang + 1
+
+Next senu
+
+End If
+Set arr3 = Nothing
+shi = 1
+hang = hangchu
+senu = bay
+
+sht = sht + 1
+
+
+
+iit = iit + huan
+
+
+
+
+Next toi
+
+
+
+
+'ActiveSheet.Cells(hang, ii).Resize(UBound(arr66), 1) = Application.Transpose(arr66)
+
+'Selection.Columns(1) = WorksheetFunction.Index(arr55, 0, 1)
+
+Set arr55 = Nothing
+Set arr66 = Nothing
+End If
+'Range("ab1").Resize(UBound(arr)) = arr
+
+End Sub
