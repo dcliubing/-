@@ -1,0 +1,187 @@
+Sub 调节阀匹配()
+                    
+                    Dim a, d, b, la, sjy  As String
+                    Dim arr As Variant
+                    Dim c, i, j, hang, lie, lie2, nn, hang2, nu, szh, szl, sj, sna, snb, kh2 As Integer
+                    nu = 0
+                    hang = 2
+                    hang2 = 1
+                    lie = 1
+                    lie2 = 1
+                    
+                      
+      snb = 1
+      gongb = InputBox("请输入工作表的名称：")
+              If gongb = "" Then
+        Exit Sub
+        End If
+      Do
+      
+      If Sheets(snb).Name = gongb Then
+      
+      Sheets(snb).Select
+      ifhz = 1
+      
+      Exit Do
+      End If
+      
+      
+      snb = snb + 1
+      
+      
+      Loop Until snb > Sheets.Count
+      
+      
+      If ifhz = 0 Then
+      
+      MsgBox "未找到" & gongb
+      
+      Exit Sub
+      End If
+      
+     
+
+ 
+                    
+            For sna = Sheets.Count To 1 Step -1
+      Debug.Print Sheets(sna).Name
+        If Sheets(sna).Name = "调节阀匹配" Then
+        
+            With Sheets(sna).Tab
+        .Color = 192
+        .TintAndShade = 0
+    End With
+
+        
+         Sheets(sna).Tab.Color = 192
+         
+         
+         
+          Sheets(sna).Delete
+         
+
+
+         
+         
+            If Sheets(sna).Name = "调节阀匹配" Then
+            
+         With Sheets(sna).Tab
+        .ColorIndex = xlNone
+        .TintAndShade = 0
+    End With
+       
+            Exit Sub
+            End If
+        End If
+    Next
+       
+
+
+ Application.ScreenUpdating = False
+    
+           Sheets(gongb).Select
+              '         Sheets.Add after:=ActiveSheet
+ Sheets(gongb).Copy after:=Sheets(sheetscount + 1)
+    
+ With ActiveSheet.Tab
+        .ColorIndex = xlNone
+        .TintAndShade = 0
+    End With
+    
+    ActiveSheet.Name = "调节阀匹配"
+    
+                    '统计阀门数量
+                    sj = Sheets("调节阀匹配").UsedRange.Columns.Count '使用的列数量
+                    Do
+                        sjy = Sheets("调节阀匹配").Cells(hang, 1)
+                        If InStr(sjy, "V-") > 0 Then
+                        nu = nu + 1
+                        End If
+                        hang = hang + 1
+                    Loop Until sjy = "总数量" Or hang > 1000
+                    
+                    
+                    
+                    If nu = 0 Or sj = 0 Then
+                        Exit Sub
+                    End If
+                    
+                    ReDim arr(1 To nu, 1 To sj)
+                    hang = 2
+                    szh = 1
+                    
+                    Do
+                        sjy = Sheets("调节阀匹配").Cells(hang, 1)
+                        If InStr(sjy, "V-") > 0 Then
+                            If szh <= nu Then
+                                For szl = 1 To sj
+                                    arr(szh, szl) = Sheets("调节阀匹配").Cells(hang, szl)
+                                    Range(Cells(hang, 1), Cells(hang, sj)).Select
+                                    With Selection.Interior
+                                    .Pattern = xlSolid
+                                    .PatternColorIndex = xlAutomatic
+                                    .Color = 65535   '标记阀门行颜色
+                                    .TintAndShade = 0
+                                    .PatternTintAndShade = 0
+                                    End With
+                                Next szl
+                            End If
+                            szh = szh + 1
+                        End If
+                        hang = hang + 1
+                    Loop Until sjy = "总数量" Or hang > 1000
+                    
+                    '隔行插入空行
+                    hang = hang - 1
+                    For hang = hang To 2 Step -1
+                        Sheets("调节阀匹配").Rows(hang).Select
+                        Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+                    Next hang
+                    
+                    hang = 1
+                    szh = 1
+                    Do
+                        sjy = Sheets("调节阀匹配").Cells(hang, 1)
+                        Sheets("调节阀匹配").Activate
+                        If InStr(sjy, "T-") > 0 And nu > 0 Then
+                            a = Split(sjy, "T-")
+                            la = Join(a, "")
+                               GoTo TW
+                            
+                         ElseIf InStr(sjy, "E-") > 0 And nu > 0 Then
+                            a = Split(sjy, "E-")
+                            la = Join(a, "")
+                            
+                            
+TW:
+                            
+                            Do
+                                sa = Split(arr(szh, 1), "V-")
+                                sb = Join(sa, "")
+                                If la = sb Then
+                                    Sheets("调节阀匹配").Cells(hang + 1, 1).Resize(1, sj) = WorksheetFunction.Index(arr, szh, 0)
+                                End If
+                                szh = szh + 1
+                            Loop Until szh > nu
+                        End If
+                        
+                        hang = hang + 1
+                        szh = 1
+                    Loop Until sjy = "总数量" Or hang > 1000
+                    
+                    '删除空行
+                    For kh2 = hang To 2 Step -1
+                        If Application.WorksheetFunction.CountA(Sheets("调节阀匹配").Range(Cells(kh2, 1), Cells(kh2, sj))) = 0 Then
+                            Rows(kh2).Delete
+                        End If
+                    Next kh2
+                    '删除重复行
+                    Dim ii As Long
+                    For ii = Range("A8888").End(xlUp).Row To 2 Step -1
+                        If WorksheetFunction.CountIf(Range("A2:A" & ii), Cells(ii, 1)) > 1 And Range(Cells(ii, 1), Cells(ii, 3)).Interior.Color = 65535 Then
+                            Cells(ii, 1).EntireRow.Delete
+                        End If
+                    Next
+                    Application.ScreenUpdating = True
+                    Erase arr
+                    End Sub
