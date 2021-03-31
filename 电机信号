@@ -1,0 +1,165 @@
+
+Sub 电机信号处理()
+Application.ScreenUpdating = False
+Dim hang, senu, hangs, ii, sh, e, f, djxh, djn, gg, tt, nn As Integer
+
+
+
+If UserForm1.Visible = False Then
+
+
+UserForm1.Show
+End If
+
+
+
+Dim arr() As Variant
+Dim arr2() As Variant
+Dim arr3() As Variant
+
+Dim sjy, a, b, c, d As String
+nn = 0
+djxh = 0
+
+For djn = 9 To 2 Step -1
+ReDim Preserve arr(nn)
+ReDim Preserve arr2(nn)
+ReDim Preserve arr3(nn)
+If UserForm1.Controls("checkbox" & djn) = True Then
+
+
+arr(nn) = djn
+
+If djn = 2 Then
+
+arr2(nn) = "电机运行反馈"
+arr3(nn) = "YL-"
+ElseIf djn = 3 Then
+arr2(nn) = "电机故障反馈"
+arr3(nn) = "YA-"
+ElseIf djn = 4 Then
+arr2(nn) = "电机备妥反馈"
+arr3(nn) = "YEP-"
+ElseIf djn = 5 Then
+arr2(nn) = "电机电流指示"
+arr3(nn) = "II-"
+ElseIf djn = 6 Then
+arr2(nn) = "电机远程启动"
+arr3(nn) = "YST-"
+ElseIf djn = 7 Then
+arr2(nn) = "电机远程停止"
+arr3(nn) = "YSD-"
+ElseIf djn = 8 Then
+arr2(nn) = "电机频率指示"
+arr3(nn) = "SI-"
+ElseIf djn = 9 Then
+arr2(nn) = "电机变频控制"
+arr3(nn) = "VFD-"
+
+End If
+
+
+
+
+
+
+
+djxh = djxh + 1
+
+nn = nn + 1
+
+End If
+
+
+
+
+Next djn
+
+
+
+
+
+
+
+
+
+
+
+
+If djxh = 0 Then
+'MsgBox "未选择任何电机信号类型"
+Exit Sub
+End If
+
+i = djxh
+e = 0
+hang = Selection.Row
+
+
+senu = Selection.Rows.Count
+
+If senu > 1 Then
+MsgBox "只能选择单行"
+Exit Sub
+End If
+
+hangs = hang + senu - 1
+
+
+
+gg = 0
+tt = 0
+
+For sh = hangs To hang Step -1
+
+sjy = ActiveSheet.Cells(sh, 1)
+
+
+If InStr(sjy, "PP-") > 0 Then
+                            a = Split(sjy, "PP-")
+                            
+                   b = Join(a, arr3(gg))
+                       
+                           ' c = Join(a, "ZSC-")
+
+
+ gg = gg + 1
+
+Rows(sh + 1).Select
+     For f = 1 To i
+e = e + 1
+ Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+    
+    
+    
+    
+    
+                      
+       ActiveSheet.Cells(sh + gg, 1) = Join(a, arr3(tt))
+       ActiveSheet.Cells(sh + gg, 2) = arr2(tt)
+       
+    '   activesheet.Cells(sh + 1, 8) = "电机运行反馈"
+ tt = tt + 1
+       Next f
+       
+       Else
+       
+       Exit Sub
+      
+         End If
+     
+                      
+                      Next sh
+                      
+                     
+                  '    activesheet.Range(Cells(hang, 1), Cells(hangs + e, 1)).Select
+                       ActiveSheet.Rows(hangs + e + 1).Select
+                       ActiveWindow.SmallScroll Down:=djxh         '自动上滚
+                       
+Erase arr
+Erase arr2
+Erase arr3
+
+
+Application.ScreenUpdating = True
+End Sub
