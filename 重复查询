@@ -1,0 +1,9 @@
+Sub 重复查询()
+Dim rng As Range, cell As Range
+Application.ScreenUpdating = False
+Set rng = Selection
+For Each cell In rng
+If Application.WorksheetFunction.CountIf(rng, cell) > 1 Then cell.Interior.ColorIndex = 3
+Next
+Application.ScreenUpdating = True
+End Sub
