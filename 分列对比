@@ -1,0 +1,20 @@
+Sub 分列对比()
+    Dim arr, d As Object, i%, j%
+   arr = ActiveSheet.Range("A1:B5000")
+    Set d = CreateObject("scripting.dictionary")
+    For i = 1 To UBound(arr)
+        d(arr(i, 1)) = ""
+    Next i
+    For j = 1 To UBound(arr)
+        If d.exists(arr(j, 2)) Then
+            d.Remove (arr(j, 2))
+        Else
+            d(arr(j, 2)) = ""
+        End If
+    Next j
+    If d.Count > 0 Then
+    [c1].Resize(d.Count, 1) = Application.Transpose(d.keys)
+    Else
+    MsgBox "未发现区别"
+    End If
+End Sub
