@@ -13,11 +13,20 @@ iol = ActiveSheet.UsedRange.Columns.Count
    ActiveSheet.ResetAllPageBreaks '重置所有水平分页符
 ActiveSheet.Names.Add "Print_Area", ActiveSheet.Range("A1").Resize(ioh, iol)  '动态打印区域
 
-i = ioh / 58
-While i > 1
-            Rows((i - 1) * 58 + 1).Select
-            ActiveWindow.SelectedSheets.HPageBreaks.Add Before:=ActiveCell
 
+for myh=1 to 500 step 1
+if activesheet.cells(myh,2) like "*项目号*" then
+exit for
+end if
+next myh
+
+if myh >=500 then
+exit sub
+end if
+i = ioh / myh
+While i > 1
+            Rows((i - 1) * myh + 1).Select
+            ActiveWindow.SelectedSheets.HPageBreaks.Add Before:=ActiveCell
           i = i - 1
 Wend
 Application.ScreenUpdating = True
