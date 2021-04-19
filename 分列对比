@@ -1,6 +1,16 @@
 Sub 分列对比()
+Application.ScreenUpdating = False
     Dim arr, d As Object, i%, j%
-   arr = ActiveSheet.Range("A1:B5000")
+    Dim rng As Range, cell As Range
+    
+    ioh = ActiveSheet.UsedRange.Rows.Count
+    Set rng = ActiveSheet.Range("A1:B" & ioh)
+For Each cell In rng
+If Application.WorksheetFunction.CountIf(rng, cell) = 1 Then cell.Interior.ColorIndex = 6
+Next
+    
+    
+   arr = ActiveSheet.Range("A1:B" & ioh)
     Set d = CreateObject("scripting.dictionary")
     For i = 1 To UBound(arr)
         d(arr(i, 1)) = ""
@@ -17,4 +27,5 @@ Sub 分列对比()
     Else
     MsgBox "未发现区别"
     End If
+    Application.ScreenUpdating = True
 End Sub
