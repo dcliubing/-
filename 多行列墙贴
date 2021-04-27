@@ -133,7 +133,7 @@ Else
 For senu = senu To 1 Step -1
 ActiveSheet.Cells(hang, iit).Value = arr3(shi, 1)
 shi = shi + 1
-hang = hang + 1
+hang = hang + ActiveSheet.Cells(hang, iit).MergeArea.Rows.Count
 
 Next senu
 
