@@ -1,29 +1,26 @@
 Sub 分页()
 Dim ioh, iol As Integer
 Application.ScreenUpdating = False
-If Not ActiveSheet.Cells(1, 7).Value Like "*仪表规格书*" Then
-MsgBox "检查是否仪表数据表表格"
-Exit Sub
-End If
+
 ioh = ActiveSheet.UsedRange.Rows.Count
 iol = ActiveSheet.UsedRange.Columns.Count
 
-
-  ActiveWindow.View = xlPageBreakPreview
+'On Error Resume Next
+ ActiveWindow.View = xlPageBreakPreview
    ActiveSheet.ResetAllPageBreaks '重置所有水平分页符
+ 
 ActiveSheet.Names.Add "Print_Area", ActiveSheet.Range("A1").Resize(ioh, iol)  '动态打印区域
 
+shuru:
+myh = InputBox("请输入每页行数：")
 
-for myh=1 to 500 step 1
-if activesheet.cells(myh,2) like "*项目号*" then
-exit for
-end if
-next myh
-
-if myh >=500 then
-exit sub
-end if
+If Not IsNumeric(myh) Then
+MsgBox "请输入数字"
+myh = ""
+GoTo shuru
+End If
 i = ioh / myh
+i = CLng(i)
 While i > 1
             Rows((i - 1) * myh + 1).Select
             ActiveWindow.SelectedSheets.HPageBreaks.Add Before:=ActiveCell
