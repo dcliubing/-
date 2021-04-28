@@ -1,15 +1,16 @@
 Sub 分页()
+
 Dim ioh, iol As Integer
 Application.ScreenUpdating = False
 
 ioh = ActiveSheet.UsedRange.Rows.Count
 iol = ActiveSheet.UsedRange.Columns.Count
 
-'On Error Resume Next
- ActiveWindow.View = xlPageBreakPreview
-   ActiveSheet.ResetAllPageBreaks '重置所有水平分页符
- 
+ ActiveSheet.ResetAllPageBreaks '重置所有水平分页符
+  
 ActiveSheet.Names.Add "Print_Area", ActiveSheet.Range("A1").Resize(ioh, iol)  '动态打印区域
+' ActiveWindow.View = xlPageBreakPreview
+
 
 shuru:
 myh = InputBox("请输入每页行数：")
@@ -20,7 +21,13 @@ myh = ""
 GoTo shuru
 End If
 i = ioh / myh
-i = CLng(i)
+If ioh Mod myh > 0 Then
+
+i = Fix(i) + 1
+
+End If
+
+
 While i > 1
             Rows((i - 1) * myh + 1).Select
             ActiveWindow.SelectedSheets.HPageBreaks.Add Before:=ActiveCell
