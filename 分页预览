@@ -6,20 +6,23 @@ Application.ScreenUpdating = False
 ioh = ActiveSheet.UsedRange.Rows.Count
 iol = ActiveSheet.UsedRange.Columns.Count
 
- ActiveSheet.ResetAllPageBreaks '重置所有水平分页符
-  
-ActiveSheet.Names.Add "Print_Area", ActiveSheet.Range("A1").Resize(ioh, iol)  '动态打印区域
+
 ' ActiveWindow.View = xlPageBreakPreview
 
 
 shuru:
 myh = InputBox("请输入每页行数：")
 
+If myh = "" Then
+Exit Sub
+End If
 If Not IsNumeric(myh) Then
 MsgBox "请输入数字"
-myh = ""
 GoTo shuru
 End If
+ ActiveSheet.ResetAllPageBreaks '重置所有水平分页符
+  
+ActiveSheet.Names.Add "Print_Area", ActiveSheet.Range("A1").Resize(ioh, iol)  '动态打印区域
 i = ioh / myh
 If ioh Mod myh > 0 Then
 
