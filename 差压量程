@@ -1,0 +1,18 @@
+Sub 差压量程()
+
+        Application.ScreenUpdating = False
+            If Not ActiveSheet.Cells(1, 8).Value Like "*差压液位*" Then
+                MsgBox "检查是否差压液位数据表表格"
+                Exit Sub
+            End If
+For xnn = 1 To ActiveSheet.UsedRange.Rows.Count Step 1
+'For xnn = 1 To 58 Step 1
+If ActiveSheet.Cells(xnn, 4).Value Like "*LT-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*LZT-*" Then
+ActiveSheet.Cells(xnn, 15).Value = "0~" & Format(ActiveSheet.Cells(xnn, 10).Value * 9.8 * ActiveSheet.Cells(xnn, 14).Value / 1000000, "0.0")
+
+End If
+
+Next xnn
+
+        Application.ScreenUpdating = True
+End Sub
