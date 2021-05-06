@@ -1,0 +1,118 @@
+Sub 数据表汇总清单生成()
+        Dim suu, indel As String
+        Application.ScreenUpdating = False
+        If Not ActiveSheet.Cells(1, 5).Text Like "*汇总清单*" Then
+            MsgBox "确认是否为汇总清单表格"
+            GoTo endd
+        End If
+        
+         Dim ioh, iol As Integer
+        
+     ' ioh = ActiveSheet.UsedRange.Row + ActiveSheet.UsedRange.Rows.Count - 1
+     
+     ioh = ActiveSheet.UsedRange.Rows.Count  '改成这样
+     
+        
+      iol = 35 '当前表总行数
+        
+       Rows("5:34").ClearContents '删当前表内容
+       Rows(iol & ":" & ioh + 1).Delete
+
+        suu = InputBox("请输入汇总表工作簿的名称：")
+        On Error GoTo endd
+        indel = ActiveWorkbook.Name
+        On Error GoTo endd
+        Dim j9, j7, n9, yl, i, a2, ll, fl, kh, kh2, dh, lh, zs, zs2, lh2, fl2, fl3, nn As Integer
+        'Dim att As String
+        Dim arr() As Variant
+        dh = 2
+        j9 = 2
+        a2 = 5
+        fl2 = 6
+        fl3 = 1
+        fl = 2
+        j7 = 0
+        yl = 1
+        nn = 0
+        ll = 1
+        i = 0
+        xnn = 1
+        zs = 0
+        Workbooks(suu & ".xls").Activate
+        Do
+            zs = zs + 1
+        Loop Until Application.WorksheetFunction.CountA(Sheets(1).Rows(zs)) = 0
+        '   Loop Until Workbooks(suu & ".xls").Sheets(1).Cells(zs, 1) = "总数量"
+        zs2 = zs - 3
+        j = zs2 \ 60
+        fy = j
+        If zs2 Mod 60 = 0 Then
+            j = j - 1  '需要复制次数
+        End If
+        Workbooks(indel).Activate
+        Do
+            i = i + 1
+            lh = ll + 33
+            lh2 = lh + 1
+            Rows(ll & ":" & lh).Select
+            Selection.Copy
+            Rows(lh2).Select
+            ActiveSheet.Paste
+            Do
+nei5:
+                '     If Workbooks(suu & ".xls").Sheets(1).Cells(j9, yl).Text Like "TE*" Then
+                '    j9 = j9 + 1
+                '    GoTo NEI5
+                '    End If
+                nn = nn + 1
+                j7 = j7 + 1
+                
+                If nn < Workbooks(suu & ".xls").Sheets(1).UsedRange.Rows.Count Then
+                
+                Workbooks(indel).ActiveSheet.Cells(a2, fl).Value = Workbooks(suu & ".xls").Sheets(1).Cells(j9, yl).Text
+              '  If Workbooks(suu & ".xls").Sheets(1).Cells(j9, yl).Text <> "" Then
+                
+             '   Workbooks(indel).ActiveSheet.Cells(a2, fl3).Value = "0"
+                
+             '   End If
+               Workbooks(indel).ActiveSheet.Cells(a2, fl2).Value = "0"
+                Workbooks(indel).ActiveSheet.Cells(a2, fl3).Value = xnn
+                
+                
+                End If
+             '   Workbooks(indel).ActiveSheet.Cells(a2, fl2).Value = Workbooks(suu & ".xls").Sheets(1).Cells(j9, yl + 10).Text
+                '   Sheets(1).Cells(a2, fl + 6).Value = Sheets(2).Cells(j9, yl + 2).Text   '待修改
+                a2 = a2 + 1
+                xnn = xnn + 1
+                j9 = j9 + 1
+                If nn Mod 30 = 0 Then
+                    a2 = a2 - 30
+                    ' MsgBox a2
+                    fl = fl + 7
+                    fl2 = fl2 + 8
+                    fl3 = fl3 + 7
+                End If
+            Loop Until j7 Mod 60 = 0
+            a2 = a2 + 5 + 29 '相邻索引表数据间隔12
+            ' MsgBox a2
+            ll = ll + 34
+            fl = fl - 14
+            fl2 = fl2 - 16
+            fl3 = fl3 - 14
+        Loop Until i = j + 1
+        '  ActiveSheet.Rows(a2 - 30) = ""   '总数量文字删除
+      
+        Rows(ll & ":" & ll + 34).Select
+        Selection.Delete
+        Rows(1).Select
+        '  ActiveSheet.PageSetup.PrintArea = Range(Cells(1, 1), Cells(ll - 1, 25))
+        ActiveSheet.PageSetup.PrintArea = "$A$1:$N$" & ll - 1   '设置打印区域
+        Do
+            Rows((fy * 34) + 1).Select
+            ActiveWindow.SelectedSheets.HPageBreaks.Add Before:=ActiveCell
+            '   Set ActiveSheet.HPageBreaks(fy).Location = Rows((fy * 40) + 1)
+            fy = fy - 1
+        Loop While fy > 0
+endd:
+        Application.ScreenUpdating = True
+End Sub
