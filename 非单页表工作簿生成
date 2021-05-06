@@ -1,0 +1,120 @@
+Sub 非单页表工作簿生成()
+        Application.ScreenUpdating = False
+            If Not ActiveSheet.Cells(1, 8).Value Like "*仪表规格书*" Then
+                MsgBox "检查是否仪表数据表表格"
+                Exit Sub
+            End If
+'On Error Resume Next
+        newname = ActiveWorkbook.Name
+        newname2 = InputBox("请输入汇总表工作簿的名称：")
+        If newname2 = "" Then
+        Exit Sub
+        End If
+        Dim iFile As String
+        iFile = ThisWorkbook.Path & "\" & newname2 & ".xls"
+        Workbooks.Add
+        ActiveWorkbook.SaveAs iFile, True
+        
+        Workbooks(newname).Activate
+        
+        
+        
+        Dim btin$, btout$, jin%, chu%
+        
+        btin$ = ActiveSheet.Cells(1, 8)
+        
+        jin = InStr(btin, "(") + 1
+        chu = InStr(btin, ")")
+        'btout = Mid(btin, jin, chu - jin)
+        btout = btin
+        Workbooks(newname2 & ".xls").Sheets.Add.Name = btout
+        Workbooks(newname2 & ".xls").Sheets(btout).Activate
+        Call 首行表格
+        Workbooks(newname).Activate
+        Dim rng As Range, a As Range
+        Dim fh, fl, lh, ll As Integer
+        fh = 1
+        fl = 1
+        
+        ll = ActiveSheet.UsedRange.Columns.Count
+        lh = ActiveSheet.UsedRange.Rows.Count
+        whh = 2
+        jch = 2
+        lch = 2
+        gzh = 2
+        
+        whl = 1
+        jcl = 2
+        lcl = 3
+        gzl = 4
+        
+        
+        For xnn = 1 To lh Step 1
+        
+        If ActiveSheet.Cells(xnn, 4).Value Like "*PG-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*TG-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*PDG-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*LT-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*LZT-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*TT-*" Then
+        
+        
+        
+        
+        
+        
+        
+        xyy = ActiveSheet.Cells(xnn, 4).Value
+        
+        
+        
+        
+        
+
+                    
+                    Workbooks(newname2 & ".xls").Sheets(btout).Cells(whh, whl).Value = ActiveSheet.Cells(xnn, 4).Value
+                    
+                    
+                    
+                    
+                    whh = whh + 1
+                    
+                    
+                    End If
+                    
+                    
+                    
+                    
+                   
+                   
+                    
+                    
+                    
+                    Next xnn
+                    
+                    
+                    
+                    
+                    
+                    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+                
+          Application.ScreenUpdating = True
+End Sub
