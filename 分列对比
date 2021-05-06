@@ -2,7 +2,13 @@ Sub 分列对比()
 Application.ScreenUpdating = False
     Dim arr, d As Object, i%, j%
     Dim rng As Range, cell As Range
-    
+        Columns("A:B").Select
+    Range("B1").Activate
+    With Selection.Interior
+        .Pattern = xlNone
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+    End With
     ioh = ActiveSheet.UsedRange.Rows.Count
     Set rng = ActiveSheet.Range("A1:B" & ioh)
 For Each cell In rng
@@ -23,7 +29,7 @@ Next
         End If
     Next j
     If d.Count > 0 Then
-    [c1].Resize(d.Count, 1) = Application.Transpose(d.keys)
+  '  [c1].Resize(d.Count, 1) = Application.Transpose(d.keys)
     Else
     MsgBox "未发现区别"
     End If
