@@ -2,8 +2,13 @@ Sub 重复查询()
 Dim rng As Range, cell As Range
 Application.ScreenUpdating = False
 Set rng = Selection
+    With Selection.Interior
+        .Pattern = xlNone
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+    End With
 For Each cell In rng
-If Application.WorksheetFunction.CountIf(rng, cell) > 1 Then cell.Interior.ColorIndex = 3
+If Application.WorksheetFunction.CountIf(rng, cell) > 1 Then cell.Interior.ColorIndex = 6
 Next
 Application.ScreenUpdating = True
 End Sub
