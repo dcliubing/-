@@ -1,0 +1,1239 @@
+
+ Dim newname, shn, newname2, activ As String
+ Dim arr33, arr44, arr55, arr66 As Variant
+ Dim senu, toi As Integer
+ Dim arr100(0 To 100)
+Sub 序号生成()
+
+Application.ScreenUpdating = False
+
+
+
+
+shuru:
+ xuhaoi = InputBox("请输入起始页号：")
+
+If xuhaoi = "" Then
+Exit Sub
+End If
+
+
+
+If Not IsNumeric(xuhaoi) Then
+MsgBox "请输入数字"
+xuhaoi = ""
+GoTo shuru
+End If
+
+xuhao = xuhaoi
+
+
+
+For xunhuan = 1 To 2 Step 1
+For xnn = 1 To ActiveSheet.UsedRange.Rows.Count Step 1
+If Not ActiveSheet.Cells(xnn, 14).Comment Is Nothing Then
+If ActiveSheet.Cells(xnn, 14).Comment.Text Like "*第页共页*" Then
+ActiveSheet.Cells(xnn, 14).Value = "第" & xuhaoi & "页 共" & xuhaoz & "页"
+xuhaoi = xuhaoi + 1
+End If
+End If
+
+If Not ActiveSheet.Cells(xnn, 9).Comment Is Nothing Then
+If ActiveSheet.Cells(xnn, 9).Comment.Text Like "*第页共页*" Then
+ActiveSheet.Cells(xnn, 9).Value = "第" & xuhaoi & "页 共" & xuhaoz & "页"
+xuhaoi = xuhaoi + 1
+End If
+End If
+Next xnn
+
+xuhaoz = xuhaoi - 1
+
+xuhaoi = xuhao
+Next xunhuan
+
+End Sub
+Sub 多行列墙贴()
+Application.ScreenUpdating = False
+
+'Set arr66 = Nothing
+Dim hang, hangs, colns, colnss, toj, huan, ii, iit, sh, shi, lie, sht, e, f As Integer
+
+Dim arr2 As Variant
+
+Dim sjy, a, b, c, d As String
+
+On Error Resume Next
+hang = Selection.Row
+
+ii = Selection.Column
+iit = Selection.Column
+
+
+colns = ActiveCell.MergeArea.Columns.Count
+
+colnss = Selection.Columns.Count
+sht = 0
+toj = 0
+
+shi = 1
+
+
+
+
+
+
+a = 1
+
+
+
+'MsgBox senu
+'If LBound(arr66) > UBound(arr66) Then   '判断数组是否为空
+If (CStr(Join(arr66, ""))) = "" Then
+
+If Application.CountA(Selection) = 0 Then
+
+
+MsgBox "未选择任何内容"
+Exit Sub
+
+End If
+
+
+toi = 0
+Do
+
+huan = ActiveSheet.Cells(hang, iit).MergeArea.Columns.Count
+
+iit = iit + huan
+
+arr100(toi) = toj + 1
+toj = toj + huan
+toi = toi + 1
+
+
+ Loop Until toj = colnss
+arr55 = Selection
+
+senu = Selection.Rows.Count
+
+
+sh = 0
+
+hangs = hang + senu - 1
+
+
+
+ReDim arr66(0 To hangs)
+
+
+For hang = hang To hangs
+                            
+                            
+                            arr66(sh) = ActiveSheet.Cells(hang, ii)
+                            sh = sh + 1
+                            
+                           
+
+Next hang
+
+
+ReDim Preserve arr66(0 To sh)
+
+
+a = 1
+'arr66 = Selection.Value
+Else
+
+c = MsgBox("是否确定粘贴", vbOKCancel)
+
+
+
+If c = 2 Then
+Set arr66 = Nothing
+
+Exit Sub
+
+End If
+
+hang = Selection.Row
+
+iit = Selection.Column
+
+
+
+
+
+For toi = toi To 1 Step -1
+
+huan = ActiveSheet.Cells(hang, iit).MergeArea.Columns.Count
+
+
+arr3 = WorksheetFunction.Index(arr55, 0, arr100(sht))
+
+
+
+hangchu = hang
+
+bay = senu
+
+
+If senu = 1 Then
+
+ActiveSheet.Cells(hang, iit).Value = arr3(1)
+
+Else
+
+For senu = senu To 1 Step -1
+ActiveSheet.Cells(hang, iit).Value = arr3(shi, 1)
+shi = shi + 1
+hang = hang + ActiveSheet.Cells(hang, iit).MergeArea.Rows.Count
+
+Next senu
+
+End If
+Set arr3 = Nothing
+shi = 1
+hang = hangchu
+senu = bay
+
+sht = sht + 1
+
+
+
+iit = iit + huan
+
+
+
+
+Next toi
+
+
+
+
+'ActiveSheet.Cells(hang, ii).Resize(UBound(arr66), 1) = Application.Transpose(arr66)
+
+'Selection.Columns(1) = WorksheetFunction.Index(arr55, 0, 1)
+
+Set arr55 = Nothing
+Set arr66 = Nothing
+End If
+'Range("ab1").Resize(UBound(arr)) = arr
+
+End Sub
+
+Sub 首行表格()
+Dim arr() As Variant
+ arr = Array("位号", "检测位置", "量程", "故障状态")
+ ActiveSheet.Range(Cells(1, 1), Cells(1, 4)) = arr
+End Sub
+
+Sub 调节阀匹配()
+                    
+                    Dim a, d, b, la, sjy  As String
+                    Dim arr As Variant
+                    Dim c, i, j, hang, lie, lie2, nn, hang2, nu, szh, szl, sj, sna, snb, kh2 As Integer
+                    nu = 0
+                    hang = 2
+                    hang2 = 1
+                    lie = 1
+                    lie2 = 1
+                    
+                      
+      snb = 1
+      gongb = InputBox("请输入工作表的名称：")
+              If gongb = "" Then
+        Exit Sub
+        End If
+      Do
+      
+      If Sheets(snb).Name = gongb Then
+      
+      Sheets(snb).Select
+      ifhz = 1
+      
+      Exit Do
+      End If
+      
+      
+      snb = snb + 1
+      
+      
+      Loop Until snb > Sheets.Count
+      
+      
+      If ifhz = 0 Then
+      
+      MsgBox "未找到" & gongb
+      
+      Exit Sub
+      End If
+      
+     
+
+ 
+                    
+            For sna = Sheets.Count To 1 Step -1
+      Debug.Print Sheets(sna).Name
+        If Sheets(sna).Name = "调节阀匹配" Then
+        
+            With Sheets(sna).Tab
+        .Color = 192
+        .TintAndShade = 0
+    End With
+
+        
+         Sheets(sna).Tab.Color = 192
+         
+         
+         
+          Sheets(sna).Delete
+         
+
+
+         
+         
+            If Sheets(sna).Name = "调节阀匹配" Then
+            
+         With Sheets(sna).Tab
+        .ColorIndex = xlNone
+        .TintAndShade = 0
+    End With
+       
+            Exit Sub
+            End If
+        End If
+    Next
+       
+
+
+ Application.ScreenUpdating = False
+    
+           Sheets(gongb).Select
+              '         Sheets.Add after:=ActiveSheet
+ Sheets(gongb).Copy after:=Sheets(sheetscount + 1)
+    
+ With ActiveSheet.Tab
+        .ColorIndex = xlNone
+        .TintAndShade = 0
+    End With
+    
+    ActiveSheet.Name = "调节阀匹配"
+    
+                    '统计阀门数量
+                    sj = Sheets("调节阀匹配").UsedRange.Columns.Count '使用的列数量
+                    Do
+                        sjy = Sheets("调节阀匹配").Cells(hang, 1)
+                        If InStr(sjy, "V-") > 0 Then
+                        nu = nu + 1
+                        End If
+                        hang = hang + 1
+                    Loop Until sjy = "总数量" Or hang > 10000
+                    
+                    
+                    
+                    If nu = 0 Or sj = 0 Then
+                        Exit Sub
+                    End If
+                    
+                    ReDim arr(1 To nu, 1 To sj)
+                    hang = 2
+                    szh = 1
+                    
+                    Do
+                        sjy = Sheets("调节阀匹配").Cells(hang, 1)
+                        If InStr(sjy, "V-") > 0 Then
+                            If szh <= nu Then
+                                For szl = 1 To sj
+                                    arr(szh, szl) = Sheets("调节阀匹配").Cells(hang, szl)
+                                    Range(Cells(hang, 1), Cells(hang, sj)).Select
+                                    With Selection.Interior
+                                    .Pattern = xlSolid
+                                    .PatternColorIndex = xlAutomatic
+                                    .Color = 65535   '标记阀门行颜色
+                                    .TintAndShade = 0
+                                    .PatternTintAndShade = 0
+                                    End With
+                                Next szl
+                            End If
+                            szh = szh + 1
+                        End If
+                        hang = hang + 1
+                    Loop Until sjy = "总数量" Or hang > 10000
+                    
+                    '隔行插入空行
+                    hang = hang - 1
+                    For hang = hang To 2 Step -1
+                        Sheets("调节阀匹配").Rows(hang).Select
+                        Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+                    Next hang
+                    
+                    hang = 1
+                    szh = 1
+                    Do
+                        sjy = Sheets("调节阀匹配").Cells(hang, 1)
+                        Sheets("调节阀匹配").Activate
+                        If InStr(sjy, "T-") > 0 And nu > 0 Then
+                            a = Split(sjy, "T-")
+                            la = Join(a, "")
+                               GoTo TW
+                            
+                         ElseIf InStr(sjy, "E-") > 0 And nu > 0 Then
+                            a = Split(sjy, "E-")
+                            la = Join(a, "")
+                            
+                            
+TW:
+                            
+                            Do
+                                sa = Split(arr(szh, 1), "V-")
+                                sb = Join(sa, "")
+                                If la = sb Then
+                                    Sheets("调节阀匹配").Cells(hang + 1, 1).Resize(1, sj) = WorksheetFunction.Index(arr, szh, 0)
+                                End If
+                                szh = szh + 1
+                            Loop Until szh > nu
+                        End If
+                        
+                        hang = hang + 1
+                        szh = 1
+                    Loop Until sjy = "总数量" Or hang > 10000
+                    
+                    '删除空行
+                    For kh2 = hang To 2 Step -1
+                        If Application.WorksheetFunction.CountA(Sheets("调节阀匹配").Range(Cells(kh2, 1), Cells(kh2, sj))) = 0 Then
+                            Rows(kh2).Delete
+                        End If
+                    Next kh2
+                    '删除重复行
+                    Dim ii As Long
+                    For ii = Range("A8888").End(xlUp).Row To 2 Step -1
+                        If WorksheetFunction.CountIf(Range("A2:A" & ii), Cells(ii, 1)) > 1 And Range(Cells(ii, 1), Cells(ii, 3)).Interior.Color = 65535 Then
+                            Cells(ii, 1).EntireRow.Delete
+                        End If
+                    Next
+                    Application.ScreenUpdating = True
+                    Erase arr
+                    End Sub
+                    
+Sub 开关阀位反馈加行()
+Application.ScreenUpdating = False
+Dim hang, senu, hangs, ii, sh, e, f As Integer
+
+
+Dim sjy, a, b, c, d As String
+
+i = 2
+e = 0
+hang = Selection.Row
+
+
+senu = Selection.Rows.Count
+
+
+hangs = hang + senu - 1
+
+
+
+
+
+
+For sh = hangs To hang Step -1
+
+sjy = ActiveSheet.Cells(sh, 1)
+
+
+If InStr(sjy, "XV-") > 0 Then
+                            a = Split(sjy, "XV-")
+                            b = Join(a, "ZSO-")
+                            c = Join(a, "ZSC-")
+
+    
+Rows(sh + 1).Select
+     For f = 1 To i
+e = e + 1
+    Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+    Next f
+                      
+       ActiveSheet.Cells(sh + 1, 1) = b
+       ActiveSheet.Cells(sh + 1, 2) = "阀位开反馈"
+     '  activesheet.Cells(sh + 1, 2) = "阀位开反馈"
+     ActiveSheet.Cells(sh + 2, 1) = c
+     ActiveSheet.Cells(sh + 2, 2) = "阀位关反馈"
+       
+    '   activesheet.Cells(sh + 2, 8) = "阀位关反馈"
+                 End If
+                      
+                      
+                      Next sh
+                      
+                     
+                      ActiveSheet.Range(Cells(hang, 1), Cells(hangs + e, 1)).Select
+                      
+
+
+Application.ScreenUpdating = True
+End Sub
+Sub 非空墙贴()
+Application.ScreenUpdating = False
+
+'Set arr33 = Nothing
+Dim hang, senu, hangs, ii, sh, e, f As Integer
+
+Dim arr2 As Variant
+
+Dim sjy, a, b, c, d As String
+
+hang = Selection.Row
+
+ii = Selection.Column
+
+
+On Error Resume Next
+
+
+'MsgBox senu
+'If LBound(arr44) > UBound(arr44) Then   '判断数组是否为空
+If (CStr(Join(arr44, ""))) = "" Then
+
+If Application.CountA(Selection) = 0 Then
+
+
+MsgBox "未选择任何内容"
+Exit Sub
+
+End If
+
+
+senu = Selection.Rows.Count
+sh = 0
+
+hangs = hang + senu - 1
+
+
+
+ReDim arr44(0 To hangs)
+
+
+For hang = hang To hangs
+If ActiveSheet.Cells(hang, ii) <> "" Then
+
+arr44(sh) = ActiveSheet.Cells(hang, ii)
+sh = sh + 1
+
+End If
+
+Next hang
+
+ReDim Preserve arr44(0 To sh)
+'arr44 = Selection.Value
+Else
+
+
+c = MsgBox("是否确定粘贴", vbOKCancel)
+
+
+
+If c = 2 Then
+Set arr44 = Nothing
+
+Exit Sub
+
+End If
+
+
+ActiveSheet.Cells(hang, ii).Resize(UBound(arr44), 1) = Application.Transpose(arr44)
+
+
+
+
+Set arr44 = Nothing
+End If
+'Range("ab1").Resize(UBound(arr)) = arr
+
+
+
+
+End Sub
+
+
+Sub 工作簿生成()
+        Application.ScreenUpdating = False
+            If Not ActiveSheet.Cells(1, 8).Value Like "*仪表规格书*" Then
+                MsgBox "检查是否仪表数据表表格"
+                Exit Sub
+            End If
+'On Error Resume Next
+        newname = ActiveWorkbook.Name
+        newname2 = InputBox("请输入汇总表工作簿的名称：")
+        If newname2 = "" Then
+        Exit Sub
+        End If
+        Dim iFile As String
+        iFile = ThisWorkbook.Path & "\" & newname2 & ".xls"
+        Workbooks.Add
+        ActiveWorkbook.SaveAs iFile, True
+        
+        Workbooks(newname).Activate
+        
+        
+        
+        Dim btin$, btout$, jin%, chu%
+        
+        btin$ = ActiveSheet.Cells(1, 8)
+        
+        jin = InStr(btin, "(") + 1
+        chu = InStr(btin, ")")
+        'btout = Mid(btin, jin, chu - jin)
+        btout = btin
+        Workbooks(newname2 & ".xls").Sheets.Add.Name = btout
+        Workbooks(newname2 & ".xls").Sheets(btout).Activate
+        Call 首行表格
+        Workbooks(newname).Activate
+        Dim rng As Range, a As Range
+        Dim fh, fl, lh, ll As Integer
+        fh = 1
+        fl = 1
+        
+        ll = ActiveSheet.UsedRange.Columns.Count
+        
+        whh = 2
+        jch = 2
+        lch = 2
+        gzh = 2
+        
+        whl = 1
+        jcl = 2
+        lcl = 3
+        gzl = 4
+        
+        
+lh = 58
+        
+        xmh = 58
+        
+        
+        yeshu = ActiveSheet.UsedRange.Rows.Count / xmh
+        
+        For n = 1 To yeshu Step 1
+        
+        Set rng = Range(Cells(fh, fl), Cells(lh, ll))
+        For Each a In rng
+
+
+        If Not a.Comment Is Nothing Then
+        
+                    If a.Comment.Text Like "*位号<仪表索引表*" Then
+                    
+                    Workbooks(newname2 & ".xls").Sheets(btout).Cells(whh, whl).Value = a.Value
+                    
+        
+                    ElseIf a.Comment.Text Like "*检测位置*" Then
+                    
+                    Workbooks(newname2 & ".xls").Sheets(btout).Cells(jch, jcl).Value = a.Value
+                    
+                    ElseIf a.Comment.Text Like "*满刻度流量*" Or a.Comment.Text Like "*流量测量范围*" Or a.Comment.Text Like "测量范围*" Then
+                    
+                    Workbooks(newname2 & ".xls").Sheets(btout).Cells(lch, lcl).Value = a.Value
+                    
+                    ElseIf a.Comment.Text Like "*故障状态*" Then
+                    
+                    Workbooks(newname2 & ".xls").Sheets(btout).Cells(gzh, gzl).Value = a.Value
+                    
+                    End If
+        End If
+        
+            
+        Next a
+    
+        fh = fh + xmh
+        lh = lh + xmh
+        whh = whh + 1
+        jch = jch + 1
+        lch = lch + 1
+        gzh = gzh + 1
+        
+        Next n
+                
+          Application.ScreenUpdating = True
+End Sub
+
+
+Sub 重复查询()
+Dim rng As Range, cell As Range
+Application.ScreenUpdating = False
+Set rng = Selection
+    With Selection.Interior
+        .Pattern = xlNone
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+    End With
+For Each cell In rng
+If Application.WorksheetFunction.CountIf(rng, cell) > 1 Then cell.Interior.ColorIndex = 6
+Next
+Application.ScreenUpdating = True
+End Sub
+Sub 差压量程()
+
+        Application.ScreenUpdating = False
+            If Not ActiveSheet.Cells(1, 7).Value Like "*差压液位*" Then
+                MsgBox "检查是否差压液位数据表表格"
+                Exit Sub
+            End If
+For xnn = 1 To ActiveSheet.UsedRange.Rows.Count Step 1
+'For xnn = 1 To 58 Step 1
+If ActiveSheet.Cells(xnn, 4).Value Like "*LT-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*LZT-*" Then
+ActiveSheet.Cells(xnn, 15).Value = "0~" & Format(ActiveSheet.Cells(xnn, 10).Value * 9.8 * ActiveSheet.Cells(xnn, 14).Value / 1000000, "0.0")
+
+End If
+
+Next xnn
+
+        Application.ScreenUpdating = True
+End Sub
+
+
+Sub 分列对比()
+Application.ScreenUpdating = False
+    Dim arr, d As Object, i%, j%
+    Dim rng As Range, cell As Range
+        Columns("A:B").Select
+    Range("B1").Activate
+    With Selection.Interior
+        .Pattern = xlNone
+        .TintAndShade = 0
+        .PatternTintAndShade = 0
+    End With
+    ioh = ActiveSheet.UsedRange.Rows.Count
+    Set rng = ActiveSheet.Range("A1:B" & ioh)
+For Each cell In rng
+If Application.WorksheetFunction.CountIf(rng, cell) = 1 Then cell.Interior.ColorIndex = 6
+Next
+    
+    
+   arr = ActiveSheet.Range("A1:B" & ioh)
+    Set d = CreateObject("scripting.dictionary")
+    For i = 1 To UBound(arr)
+        d(arr(i, 1)) = ""
+    Next i
+    For j = 1 To UBound(arr)
+        If d.exists(arr(j, 2)) Then
+            d.Remove (arr(j, 2))
+        Else
+            d(arr(j, 2)) = ""
+        End If
+    Next j
+    If d.Count > 0 Then
+  '  [c1].Resize(d.Count, 1) = Application.Transpose(d.keys)
+    Else
+    MsgBox "未发现区别"
+    End If
+    Application.ScreenUpdating = True
+End Sub
+
+
+Sub 分页()
+
+Dim ioh, iol As Integer
+Application.ScreenUpdating = False
+On Error Resume Next
+ioh = ActiveSheet.UsedRange.Rows.Count
+iol = ActiveSheet.UsedRange.Columns.Count
+
+
+
+
+shuru:
+myh = InputBox("请输入每页行数：")
+
+If myh = "" Then
+Exit Sub
+End If
+
+
+
+If Not IsNumeric(myh) Then
+MsgBox "请输入数字"
+myh = ""
+GoTo shuru
+End If
+i = ioh / myh
+If ioh Mod myh > 0 Then
+
+i = Fix(i) + 1
+
+End If
+
+ ActiveSheet.ResetAllPageBreaks '重置所有水平分页符
+  
+ActiveSheet.Names.Add "Print_Area", ActiveSheet.Range("A1").Resize(ioh, iol)  '动态打印区域
+' ActiveWindow.View = xlPageBreakPreview
+
+While i > 1
+            Rows((i - 1) * myh + 1).Select
+            
+            iiiii = (i - 1) * myh + 1
+            
+            ij = 2
+            
+            ActiveWindow.SelectedSheets.HPageBreaks.Add Before:=ActiveCell
+          i = i - 1
+Wend
+Application.ScreenUpdating = True
+ 
+End Sub
+
+
+Sub 电机信号处理()
+Application.ScreenUpdating = False
+Dim hang, senu, hangs, ii, sh, e, f, djxh, djn, gg, tt, nn As Integer
+
+
+
+If UserForm1.Visible = False Then
+
+
+UserForm1.Show
+End If
+
+
+
+Dim arr() As Variant
+Dim arr2() As Variant
+Dim arr3() As Variant
+
+Dim sjy, a, b, c, d As String
+nn = 0
+djxh = 0
+
+For djn = 9 To 2 Step -1
+ReDim Preserve arr(nn)
+ReDim Preserve arr2(nn)
+ReDim Preserve arr3(nn)
+If UserForm1.Controls("checkbox" & djn) = True Then
+
+
+arr(nn) = djn
+
+If djn = 2 Then
+
+arr2(nn) = "电机运行反馈"
+arr3(nn) = "YL-"
+ElseIf djn = 3 Then
+arr2(nn) = "电机故障反馈"
+arr3(nn) = "YA-"
+ElseIf djn = 4 Then
+arr2(nn) = "电机备妥反馈"
+arr3(nn) = "YEP-"
+ElseIf djn = 5 Then
+arr2(nn) = "电机电流指示"
+arr3(nn) = "II-"
+ElseIf djn = 6 Then
+arr2(nn) = "电机远程启动"
+arr3(nn) = "YST-"
+ElseIf djn = 7 Then
+arr2(nn) = "电机远程停止"
+arr3(nn) = "YSD-"
+ElseIf djn = 8 Then
+arr2(nn) = "电机频率指示"
+arr3(nn) = "SI-"
+ElseIf djn = 9 Then
+arr2(nn) = "电机变频控制"
+arr3(nn) = "VFD-"
+
+End If
+
+
+
+
+
+
+
+djxh = djxh + 1
+
+nn = nn + 1
+
+End If
+
+
+
+
+Next djn
+
+
+
+
+
+
+
+
+
+
+
+
+If djxh = 0 Then
+'MsgBox "未选择任何电机信号类型"
+Exit Sub
+End If
+
+i = djxh
+e = 0
+hang = Selection.Row
+
+
+senu = Selection.Rows.Count
+
+If senu > 1 Then
+MsgBox "只能选择单行"
+Exit Sub
+End If
+
+hangs = hang + senu - 1
+
+
+
+gg = 0
+tt = 0
+
+For sh = hangs To hang Step -1
+
+sjy = ActiveSheet.Cells(sh, 1)
+
+
+If InStr(sjy, "PP-") > 0 Then
+                            a = Split(sjy, "PP-")
+                            
+                   b = Join(a, arr3(gg))
+                       
+                           ' c = Join(a, "ZSC-")
+
+
+ gg = gg + 1
+
+Rows(sh + 1).Select
+     For f = 1 To i
+e = e + 1
+ Selection.Insert Shift:=xlDown, CopyOrigin:=xlFormatFromLeftOrAbove
+    
+    
+    
+    
+    
+                      
+       ActiveSheet.Cells(sh + gg, 1) = Join(a, arr3(tt))
+       ActiveSheet.Cells(sh + gg, 2) = arr2(tt)
+       
+    '   activesheet.Cells(sh + 1, 8) = "电机运行反馈"
+ tt = tt + 1
+       Next f
+       
+       Else
+       
+       Exit Sub
+      
+         End If
+     
+                      
+                      Next sh
+                      
+                     
+                  '    activesheet.Range(Cells(hang, 1), Cells(hangs + e, 1)).Select
+                       ActiveSheet.Rows(hangs + e + 1).Select
+                       ActiveWindow.SmallScroll Down:=djxh         '自动上滚
+                       
+Erase arr
+Erase arr2
+Erase arr3
+
+
+Application.ScreenUpdating = True
+End Sub
+
+
+Sub 非单页表工作簿生成()
+        Application.ScreenUpdating = False
+            If Not ActiveSheet.Cells(1, 8).Value Like "*仪表规格书*" Then
+                MsgBox "检查是否仪表数据表表格"
+                Exit Sub
+            End If
+'On Error Resume Next
+        newname = ActiveWorkbook.Name
+        newname2 = InputBox("请输入汇总表工作簿的名称：")
+        If newname2 = "" Then
+        Exit Sub
+        End If
+        Dim iFile As String
+        iFile = ThisWorkbook.Path & "\" & newname2 & ".xls"
+        Workbooks.Add
+        ActiveWorkbook.SaveAs iFile, True
+        
+        Workbooks(newname).Activate
+        
+        
+        
+        Dim btin$, btout$, jin%, chu%
+        
+        btin$ = ActiveSheet.Cells(1, 8)
+        
+        jin = InStr(btin, "(") + 1
+        chu = InStr(btin, ")")
+        'btout = Mid(btin, jin, chu - jin)
+        btout = btin
+        Workbooks(newname2 & ".xls").Sheets.Add.Name = btout
+        Workbooks(newname2 & ".xls").Sheets(btout).Activate
+        Call 首行表格
+        Workbooks(newname).Activate
+        Dim rng As Range, a As Range
+        Dim fh, fl, lh, ll As Integer
+        fh = 1
+        fl = 1
+        
+        ll = ActiveSheet.UsedRange.Columns.Count
+        lh = ActiveSheet.UsedRange.Rows.Count
+        whh = 2
+        jch = 2
+        lch = 2
+        gzh = 2
+        
+        whl = 1
+        jcl = 2
+        lcl = 3
+        gzl = 4
+        
+        
+        For xnn = 1 To lh Step 1
+        
+        If ActiveSheet.Cells(xnn, 4).Value Like "*PG-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*TG-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*PDG-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*LT-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*LZT-*" Or ActiveSheet.Cells(xnn, 4).Value Like "*TT-*" Then
+        
+        
+        
+        
+        
+        
+        
+        xyy = ActiveSheet.Cells(xnn, 4).Value
+        
+        
+        
+        
+        
+
+                    
+                    Workbooks(newname2 & ".xls").Sheets(btout).Cells(whh, whl).Value = ActiveSheet.Cells(xnn, 4).Value
+                    Workbooks(newname2 & ".xls").Sheets(btout).Cells(whh, whl + 1).Value = ActiveSheet.Cells(xnn, 6).Value
+                    Workbooks(newname2 & ".xls").Sheets(btout).Cells(whh, whl + 2).Value = ActiveSheet.Cells(xnn, 12).Value
+                    Workbooks(newname2 & ".xls").Sheets(btout).Cells(whh, whl + 6).Value = ActiveSheet.Cells(xnn, 8).Value
+                    
+                    whh = whh + 1
+                    
+                    
+                    End If
+                    
+                    
+                    
+                    
+                   
+                   
+                    
+                    
+                    
+                    Next xnn
+                    
+                    
+                    
+                    
+                    
+                    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+                
+          Application.ScreenUpdating = True
+End Sub
+Sub 数据表汇总清单生成()
+        Dim suu, indel As String
+        Application.ScreenUpdating = False
+        If Not ActiveSheet.Cells(1, 5).Text Like "*汇总清单*" Then
+            MsgBox "确认是否为汇总清单表格"
+            GoTo endd
+        End If
+        
+         Dim ioh, iol As Integer
+        
+     ' ioh = ActiveSheet.UsedRange.Row + ActiveSheet.UsedRange.Rows.Count - 1
+     
+     ioh = ActiveSheet.UsedRange.Rows.Count  '改成这样
+     
+        
+      iol = 35 '当前表总行数
+        
+       Rows("5:34").ClearContents '删当前表内容
+       Rows(iol & ":" & ioh + 1).Delete
+
+        suu = InputBox("请输入汇总表工作簿的名称：")
+        On Error GoTo endd
+        indel = ActiveWorkbook.Name
+        On Error GoTo endd
+        Dim j9, j7, n9, yl, i, a2, ll, fl, kh, kh2, dh, lh, zs, zs2, lh2, fl2, fl3, nn As Integer
+        'Dim att As String
+        Dim arr() As Variant
+        dh = 2
+        j9 = 2
+        a2 = 5
+        fl2 = 6
+        fl3 = 1
+        fl = 2
+        j7 = 0
+        yl = 1
+        nn = 0
+        ll = 1
+        i = 0
+        xnn = 1
+        zs = 0
+        Workbooks(suu & ".xls").Activate
+        Do
+            zs = zs + 1
+        Loop Until Application.WorksheetFunction.CountA(Sheets(1).Rows(zs)) = 0
+        '   Loop Until Workbooks(suu & ".xls").Sheets(1).Cells(zs, 1) = "总数量"
+        zs2 = zs - 3
+        j = zs2 \ 60
+        fy = j
+        If zs2 Mod 60 = 0 Then
+            j = j - 1  '需要复制次数
+        End If
+        Workbooks(indel).Activate
+        Do
+            i = i + 1
+            lh = ll + 33
+            lh2 = lh + 1
+            Rows(ll & ":" & lh).Select
+            Selection.Copy
+            Rows(lh2).Select
+            ActiveSheet.Paste
+            Do
+nei5:
+                '     If Workbooks(suu & ".xls").Sheets(1).Cells(j9, yl).Text Like "TE*" Then
+                '    j9 = j9 + 1
+                '    GoTo NEI5
+                '    End If
+                nn = nn + 1
+                j7 = j7 + 1
+                
+                If nn < Workbooks(suu & ".xls").Sheets(1).UsedRange.Rows.Count Then
+                
+                Workbooks(indel).ActiveSheet.Cells(a2, fl).Value = Workbooks(suu & ".xls").Sheets(1).Cells(j9, yl).Text
+              '  If Workbooks(suu & ".xls").Sheets(1).Cells(j9, yl).Text <> "" Then
+                
+             '   Workbooks(indel).ActiveSheet.Cells(a2, fl3).Value = "0"
+                
+             '   End If
+               Workbooks(indel).ActiveSheet.Cells(a2, fl2).Value = "0"
+                Workbooks(indel).ActiveSheet.Cells(a2, fl3).Value = xnn
+                
+                
+                End If
+             '   Workbooks(indel).ActiveSheet.Cells(a2, fl2).Value = Workbooks(suu & ".xls").Sheets(1).Cells(j9, yl + 10).Text
+                '   Sheets(1).Cells(a2, fl + 6).Value = Sheets(2).Cells(j9, yl + 2).Text   '待修改
+                a2 = a2 + 1
+                xnn = xnn + 1
+                j9 = j9 + 1
+                If nn Mod 30 = 0 Then
+                    a2 = a2 - 30
+                    ' MsgBox a2
+                    fl = fl + 7
+                    fl2 = fl2 + 8
+                    fl3 = fl3 + 7
+                End If
+            Loop Until j7 Mod 60 = 0
+            a2 = a2 + 5 + 29 '相邻索引表数据间隔12
+            ' MsgBox a2
+            ll = ll + 34
+            fl = fl - 14
+            fl2 = fl2 - 16
+            fl3 = fl3 - 14
+        Loop Until i = j + 1
+        '  ActiveSheet.Rows(a2 - 30) = ""   '总数量文字删除
+      
+        Rows(ll & ":" & ll + 34).Select
+        Selection.Delete
+        Rows(1).Select
+        '  ActiveSheet.PageSetup.PrintArea = Range(Cells(1, 1), Cells(ll - 1, 25))
+        ActiveSheet.PageSetup.PrintArea = "$A$1:$N$" & ll - 1   '设置打印区域
+        Do
+            Rows((fy * 34) + 1).Select
+            ActiveWindow.SelectedSheets.HPageBreaks.Add Before:=ActiveCell
+            '   Set ActiveSheet.HPageBreaks(fy).Location = Rows((fy * 40) + 1)
+            fy = fy - 1
+        Loop While fy > 0
+endd:
+        Application.ScreenUpdating = True
+End Sub
+
+Sub 管道条件填充()
+Application.ScreenUpdating = False
+        If Not ActiveSheet.Cells(1, 1).Text Like "*仪  表  测  量  部  件  条  件  表*" Then
+            MsgBox "确认是否为测量部件条件表表格"
+            Exit Sub
+        End If
+
+
+
+nns = 1
+        For xnn = 1 To ActiveSheet.UsedRange.Rows.Count Step 1
+        
+        If ActiveSheet.Cells(xnn, 2).Value Like "*PG-*" Or ActiveSheet.Cells(xnn, 2).Value Like "*TG-*" Or ActiveSheet.Cells(xnn, 2).Value Like "*PDG-*" Or ActiveSheet.Cells(xnn, 2).Value Like "*LT-*" Or ActiveSheet.Cells(xnn, 2).Value Like "*LZT-*" Or ActiveSheet.Cells(xnn, 2).Value Like "*TT-*" Then
+        
+        
+
+        
+        
+                     If Not ActiveSheet.Cells(xnn, 9).Value Like "*ASME*" Then
+
+        
+        
+        
+        
+        
+
+                    
+                    ActiveSheet.Cells(xnn, 9).Value = "ASME B16.5/RF/" & ActiveSheet.Cells(xnn, 9).Value
+                 End If
+                    ActiveSheet.Cells(xnn, 8).Value = "DN40"
+                    ActiveSheet.Cells(xnn, 7).Value = "CL150"
+                    ActiveSheet.Cells(xnn, 6).Value = "固定法兰"
+                    
+                  ActiveSheet.Cells(xnn, 1).Value = nns
+                    
+                    nns = nns + 1
+                    
+                      End If
+                   
+                   
+                    
+                    
+                    
+                    Next xnn
+                    
+
+Application.ScreenUpdating = True
+
+End Sub
