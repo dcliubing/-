@@ -1047,7 +1047,182 @@ Erase arr3
 
 Application.ScreenUpdating = True
 End Sub
+Sub 插入复制()
 
+        Application.ScreenUpdating = False
+
+
+       lh = ActiveSheet.UsedRange.Rows.Count
+
+c = MsgBox("是否确定插入复制", vbOKCancel)
+
+
+If c = 2 Then
+
+Exit Sub
+
+
+End If
+
+For xnn = lh To 1 Step -1
+
+
+
+Rows(xnn).Select
+    Selection.Copy
+    Selection.Insert Shift:=xlUp
+
+
+
+
+
+Next xnn
+
+
+
+
+  Application.ScreenUpdating = True
+
+
+
+
+
+
+
+End Sub
+Sub test()
+
+        Application.ScreenUpdating = False
+
+ll = ActiveSheet.UsedRange.Columns.Count
+       lh = ActiveSheet.UsedRange.Rows.Count
+
+'c = MsgBox("是否确定插入复制", vbOKCancel)
+
+
+If c = 2 Then
+
+Exit Sub
+
+
+End If
+
+ann = 1
+
+ arr = Rows(1 & ":" & lh)
+
+For xnn = 1 To lh * 2 Step 2
+
+
+
+
+ Rows(xnn) = WorksheetFunction.Index(arr, ann, 0)
+ 
+
+ ann = ann + 1
+ 
+
+ 
+ Next xnn
+ 
+ ann = 1
+ 
+ For xnn = 2 To lh * 2 Step 2
+
+
+
+
+ Rows(xnn) = WorksheetFunction.Index(arr, ann, 0)
+ 
+
+ ann = ann + 1
+ 
+
+ 
+ Next xnn
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  Application.ScreenUpdating = True
+
+
+
+
+
+
+
+End Sub
+
+Sub 高速插入复制()
+
+        Application.ScreenUpdating = False
+
+
+ioh = ActiveSheet.UsedRange.Row + ActiveSheet.UsedRange.Rows.Count - 1
+iol = ActiveSheet.UsedRange.Column + ActiveSheet.UsedRange.Columns.Count - 1
+c = MsgBox("是否确定插入复制", vbOKCancel)
+
+
+If c = 2 Then
+
+Exit Sub
+
+
+End If
+
+ann = 1
+
+
+ arr = Range(Cells(1, 1), Cells(ioh, iol))
+
+
+
+For xnn = 1 To ioh * 2 Step 2
+
+Range(Cells(xnn, 1), Cells(xnn, iol)) = WorksheetFunction.Index(arr, ann, 0)
+ 
+
+ ann = ann + 1
+ 
+
+ 
+ Next xnn
+ 
+ ann = 1
+ 
+ For xnn = 2 To ioh * 2 Step 2
+
+
+
+
+Range(Cells(xnn, 1), Cells(xnn, iol)) = WorksheetFunction.Index(arr, ann, 0)
+ 
+
+ ann = ann + 1
+ 
+
+ 
+ Next xnn
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  Application.ScreenUpdating = True
+
+
+
+
+
+
+
+End Sub
 
 Sub 非单页表工作簿生成()
         Application.ScreenUpdating = False
@@ -1363,3 +1538,4 @@ nns = 1
 Application.ScreenUpdating = True
 
 End Sub
+
