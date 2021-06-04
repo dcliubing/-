@@ -3,6 +3,12 @@
  Dim arr33, arr44, arr55, arr66 As Variant
  Dim senu, toi As Integer
  Dim arr100(0 To 100)
+ Sub 取所有工作表名()
+For i = 1 To Sheets.Count
+Cells(i, 10) = Sheets(i).Name
+Next
+End Sub
+
 Sub 序号生成()
 
 Application.ScreenUpdating = False
