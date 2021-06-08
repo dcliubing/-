@@ -3,12 +3,6 @@
  Dim arr33, arr44, arr55, arr66 As Variant
  Dim senu, toi As Integer
  Dim arr100(0 To 100)
- Sub 取所有工作表名()
-For i = 1 To Sheets.Count
-Cells(i, 10) = Sheets(i).Name
-Next
-End Sub
-
 Sub 序号生成()
 
 Application.ScreenUpdating = False
@@ -316,7 +310,7 @@ Sub 调节阀匹配()
     
            Sheets(gongb).Select
               '         Sheets.Add after:=ActiveSheet
- Sheets(gongb).Copy after:=Sheets(sheetscount + 1)
+ Sheets(gongb).Copy After:=Sheets(sheetscount + 1)
     
  With ActiveSheet.Tab
         .ColorIndex = xlNone
@@ -1096,71 +1090,109 @@ Next xnn
 
 
 End Sub
-Sub test()
 
-        Application.ScreenUpdating = False
+Sub SHEETCOUNT()
+i = Worksheets.Count
+MsgBox i
+End Sub
 
-ll = ActiveSheet.UsedRange.Columns.Count
-       lh = ActiveSheet.UsedRange.Rows.Count
+Sub 取工作表名()
+For i = 1 To Sheets.Count
+Cells(i, 26) = Sheets(i).Name
+Next
 
-'c = MsgBox("是否确定插入复制", vbOKCancel)
-
-
-If c = 2 Then
-
-Exit Sub
-
-
-End If
-
-ann = 1
-
- arr = Rows(1 & ":" & lh)
-
-For xnn = 1 To lh * 2 Step 2
-
+End Sub
+Function LastRow(sh As Worksheet)
+    On Error Resume Next
+    LastRow = sh.Cells.Find(What:="*", _
+                            After:=sh.Range("A1"), _
+                            LookAt:=xlPart, _
+                            LookIn:=xlFormulas, _
+                            SearchOrder:=xlByRows, _
+                            SearchDirection:=xlPrevious, _
+                            MatchCase:=False).Row
+    On Error GoTo 0
+End Function
 
 
-
- Rows(xnn) = WorksheetFunction.Index(arr, ann, 0)
- 
-
- ann = ann + 1
- 
-
- 
- Next xnn
- 
- ann = 1
- 
- For xnn = 2 To lh * 2 Step 2
+Function LastCol(sh As Worksheet)
+    On Error Resume Next
+    LastCol = sh.Cells.Find(What:="*", _
+                            After:=sh.Range("A1"), _
+                            LookAt:=xlPart, _
+                            LookIn:=xlFormulas, _
+                            SearchOrder:=xlByColumns, _
+                            SearchDirection:=xlPrevious, _
+                            MatchCase:=False).Column
+    On Error GoTo 0
+End Function
 
 
 
+Sub 工作表合并()
+    Dim sh As Worksheet
+    Dim DestSh As Worksheet
+    Dim Last As Long
+    Dim CopyRng As Range
 
- Rows(xnn) = WorksheetFunction.Index(arr, ann, 0)
- 
+    With Application
+        .ScreenUpdating = False
+        .EnableEvents = False
+    End With
 
- ann = ann + 1
- 
+    'Delete the sheet "RDBMergeSheet" if it exist
+    Application.DisplayAlerts = False
+    On Error Resume Next
+    ActiveWorkbook.Worksheets("RDBMergeSheet").Delete
+    On Error GoTo 0
+    Application.DisplayAlerts = True
 
- 
- Next xnn
- 
- 
- 
- 
- 
- 
- 
-  Application.ScreenUpdating = True
+    'Add a worksheet with the name "RDBMergeSheet"
+    'Set DestSh = ActiveWorkbook.Worksheets.Add
+    'DestSh.Name = "RDBMergeSheet"
 
+    'loop through all worksheets and copy the data to the DestSh
+    For Each sh In ActiveWorkbook.Worksheets
+        If sh.Name <> ActiveSheet.Name Then
 
+            'Find the last row with data on the ActiveSheet
+            Last = LastRow(ActiveSheet)
 
+            'Fill in the range that you want to copy
+            Set CopyRng = sh.UsedRange
 
+            'Test if there enough rows in the ActiveSheet to copy all the data
+            If Last + CopyRng.Rows.Count > ActiveSheet.Rows.Count Then
+                MsgBox "There are not enough rows in the ActiveSheet"
+                GoTo ExitTheSub
+            End If
 
+            'This example copies values/formats, if you only want to copy the
+            'values or want to copy everything look at the example below this macro
+            CopyRng.Copy
+            With ActiveSheet.Cells(Last + 1, "A")
+                .PasteSpecial xlPasteValues
+                .PasteSpecial xlPasteFormats
+                Application.CutCopyMode = False
+            End With
 
+            'Optional: This will copy the sheet name in the H column
+            'ActiveSheet.Cells(Last + 1, "H").Resize(CopyRng.Rows.Count).Value = sh.Name
 
+        End If
+    Next
+
+ExitTheSub:
+
+    Application.Goto ActiveSheet.Cells(1)
+
+    'AutoFit the column width in the ActiveSheet sheet
+    ActiveSheet.Columns.AutoFit
+
+    With Application
+        .ScreenUpdating = True
+        .EnableEvents = True
+    End With
 End Sub
 
 Sub 高速插入复制()
@@ -1327,7 +1359,7 @@ Sub 非单页表工作簿生成()
                     
                     Workbooks(newname2 & ".xls").Sheets("汇总").Cells(whh, whl).Value = ActiveSheet.Cells(xnn, 4).Value
                     Workbooks(newname2 & ".xls").Sheets("汇总").Cells(whh, whl + 1).Value = ActiveSheet.Cells(xnn, 6).Value
-                    Workbooks(newname2 & ".xls").Sheets("汇总").Cells(whh, whl + 2).Value = ActiveSheet.Cells(xnn, 12).Value
+                    Workbooks(newname2 & ".xls").Sheets("汇总").Cells(whh, whl + 2).Value = ActiveSheet.Cells(xnn, 10).Value
                     Workbooks(newname2 & ".xls").Sheets("汇总").Cells(whh, whl + 6).Value = ActiveSheet.Cells(xnn, 8).Value
                     
                     whh = whh + 1
