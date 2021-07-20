@@ -3,6 +3,69 @@
  Dim arr33, arr44, arr55, arr66 As Variant
  Dim senu, toi As Integer
  Dim arr100(0 To 100)
+Sub 序号生成tmp()
+Dim lh, dn, gn, a2, a3, fl, fl2, i, sdn As Integer
+On Error GoTo endd
+shuru:
+ xuhaoi = InputBox("请输入起始页号：")
+
+If xuhaoi = "" Then
+Exit Sub
+End If
+
+
+
+If Not IsNumeric(xuhaoi) Then
+MsgBox "请输入数字"
+xuhaoi = ""
+GoTo shuru
+End If
+
+xuhao = xuhaoi
+
+
+
+
+
+
+
+
+
+
+For xunhuan = 1 To 2 Step 1
+       
+            If ActiveSheet.Cells(1, 8).Value Like "*仪表规格书*" Then
+            
+                    a2 = 3
+                    fl = 14
+                 
+                    i = 58    '数据表行数
+
+                    Do
+                       
+                        ActiveSheet.Cells(a2, fl).Value = "第" & xuhaoi & "页 共" & xuhaoz & "页"
+                        xuhaoi = xuhaoi + 1
+                                                                 
+                        a2 = a2 + i
+                    Loop Until Application.WorksheetFunction.CountA(ActiveSheet.Rows(a2)) = 0
+            Else
+            MsgBox "检查表格格式"
+            Exit Sub
+            End If
+  
+  xuhaoz = xuhaoi - 1
+
+xuhaoi = xuhao
+  
+  
+  
+  
+Next xunhuan
+
+endd:
+End Sub
+
+
 Sub 序号生成()
 
 Application.ScreenUpdating = False
@@ -37,7 +100,12 @@ ActiveSheet.Cells(xnn, 14).Value = "第" & xuhaoi & "页 共" & xuhaoz & "页"
 xuhaoi = xuhaoi + 1
 End If
 End If
-
+If Not ActiveSheet.Cells(xnn, 12).Comment Is Nothing Then
+If ActiveSheet.Cells(xnn, 12).Comment.Text Like "*第页共页*" Then
+ActiveSheet.Cells(xnn, 12).Value = "第" & xuhaoi & "页 共" & xuhaoz & "页"
+xuhaoi = xuhaoi + 1
+End If
+End If
 If Not ActiveSheet.Cells(xnn, 9).Comment Is Nothing Then
 If ActiveSheet.Cells(xnn, 9).Comment.Text Like "*第页共页*" Then
 ActiveSheet.Cells(xnn, 9).Value = "第" & xuhaoi & "页 共" & xuhaoz & "页"
@@ -1126,9 +1194,132 @@ Function LastCol(sh As Worksheet)
                             MatchCase:=False).Column
     On Error GoTo 0
 End Function
+Sub 索引田()
+
+  lh = ActiveSheet.UsedRange.Rows.Count
+  
+  For i = 1 To lh Step 1
+
+If InStr(ActiveSheet.Cells(i, 2).Value, "TIC-") > 0 Then
+
+ActiveSheet.Cells(i, 3).Value = ActiveSheet.Cells(i + 1, 3).Value & "指示调节"
+
+ElseIf InStr(ActiveSheet.Cells(i, 2).Value, "TICA-") > 0 Then
+
+ActiveSheet.Cells(i, 3).Value = ActiveSheet.Cells(i + 1, 3).Value & "指示调节报警"
+
+ElseIf InStr(ActiveSheet.Cells(i, 2).Value, "TISA-") > 0 Then
+
+ActiveSheet.Cells(i, 3).Value = ActiveSheet.Cells(i + 1, 3).Value & "指示联锁报警"
+
+ElseIf InStr(ActiveSheet.Cells(i, 2).Value, "TIA-") > 0 Then
+
+ActiveSheet.Cells(i, 3).Value = ActiveSheet.Cells(i + 1, 3).Value & "指示报警"
+
+
+End If
 
 
 
+
+Next i
+
+
+
+
+End Sub
+Sub 电磁阀随阀带()
+
+  lh = ActiveSheet.UsedRange.Rows.Count
+  
+  For i = 1 To lh Step 1
+
+If InStr(ActiveSheet.Cells(i, 5).Value, "电磁阀") > 0 Then
+
+ActiveSheet.Cells(i, 12).Value = "随阀带"
+
+
+
+
+End If
+
+
+
+
+Next i
+
+
+
+
+End Sub
+
+
+Sub test()
+
+        Application.ScreenUpdating = False
+
+ll = ActiveSheet.UsedRange.Columns.Count
+       lh = ActiveSheet.UsedRange.Rows.Count
+
+'c = MsgBox("是否确定插入复制", vbOKCancel)
+
+
+If c = 2 Then
+
+Exit Sub
+
+
+End If
+
+ann = 1
+
+ arr = Rows(1 & ":" & lh)
+
+For xnn = 1 To lh * 2 Step 2
+
+
+
+
+ Rows(xnn) = WorksheetFunction.Index(arr, ann, 0)
+ 
+
+ ann = ann + 1
+ 
+
+ 
+ Next xnn
+ 
+ ann = 1
+ 
+ For xnn = 2 To lh * 2 Step 2
+
+
+
+
+ Rows(xnn) = WorksheetFunction.Index(arr, ann, 0)
+ 
+
+ ann = ann + 1
+ 
+
+ 
+ Next xnn
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  Application.ScreenUpdating = True
+
+
+
+
+
+
+
+End Sub
 Sub 工作表合并()
     Dim sh As Worksheet
     Dim DestSh As Worksheet
@@ -1184,7 +1375,7 @@ Sub 工作表合并()
 
 ExitTheSub:
 
-    Application.Goto ActiveSheet.Cells(1)
+    Application.GoTo ActiveSheet.Cells(1)
 
     'AutoFit the column width in the ActiveSheet sheet
     ActiveSheet.Columns.AutoFit
@@ -1194,7 +1385,6 @@ ExitTheSub:
         .EnableEvents = True
     End With
 End Sub
-
 Sub 高速插入复制()
 
         Application.ScreenUpdating = False
